@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "927015391554",
+    "firebase_url": "https://in-need-project-default-rtdb.firebaseio.com",
+    "project_id": "in-need-project",
+    "storage_bucket": "in-need-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927015391554:android:01ec838a6d0c7602c9f8db",
+        "android_client_info": {
+          "package_name": "com.shuja.inneed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927015391554-cqcp4ifvm0udpdl5496bqaidvbgi9ngl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shuja.inneed",
+            "certificate_hash": "176a8c3b2674274d8801e665a181e04cff8a3c51"
+          }
+        },
+        {
+          "client_id": "927015391554-sfmcc4jcnqus6n52fu92584d9pikkbl9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shuja.inneed",
+            "certificate_hash": "3425b024814e678d7fb17390abce5e6239a6bc76"
+          }
+        },
+        {
+          "client_id": "927015391554-7ugg37qr4a4ug1qslkbn17qvhi4klpgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDranVu8rNOKGbrYXHIl7cObwCQzIzBbZg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927015391554-7ugg37qr4a4ug1qslkbn17qvhi4klpgv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "927015391554-3m9v8k2toj8k6nd9erjdqd0oi7165qhp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.inNeed"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927015391554:android:df79dbd8e435fc18c9f8db",
+        "android_client_info": {
+          "package_name": "com.shujalisha.inneed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927015391554-7ugg37qr4a4ug1qslkbn17qvhi4klpgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDranVu8rNOKGbrYXHIl7cObwCQzIzBbZg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927015391554-7ugg37qr4a4ug1qslkbn17qvhi4klpgv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "927015391554-3m9v8k2toj8k6nd9erjdqd0oi7165qhp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.inNeed"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
