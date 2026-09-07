@@ -13,7 +13,7 @@ class HospitalTab extends StatefulWidget {
 
 class _Hospitaltabstate extends State<HospitalTab> {
 
-  // 👈 STEP 2: Screen open hote hi location fetch karne ke liye initState
+  // init for fetching location right after the screen opens
   @override
   void initState() {
     super.initState();
@@ -24,7 +24,7 @@ class _Hospitaltabstate extends State<HospitalTab> {
 
   @override
   Widget build(BuildContext context) {
-    // Consumer se pooray column ko wrap kar rahe hain taake Map aur Cards dono provider ko listen kar sakein
+    //wrapping the whole column with consumer so map and cards can listen to the provider
     return Consumer<HospitalProvider>(
       builder: (context, hospitalProvider, child) {
         return SingleChildScrollView(
@@ -65,7 +65,7 @@ class _Hospitaltabstate extends State<HospitalTab> {
 
               const SizedBox(height: 16),
 
-              // 2. Info Header Banner
+              // Info Header Banner
               Container(
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -100,7 +100,7 @@ class _Hospitaltabstate extends State<HospitalTab> {
 
               const SizedBox(height: 16),
 
-              // 3. Section Title
+              // Section Title
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
@@ -122,7 +122,7 @@ class _Hospitaltabstate extends State<HospitalTab> {
                 ),
               ),
 
-              // 4. ListView using Custom HospitalCard Widget
+              //  ListView using Custom HospitalCard Widget
               hospitalProvider.isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : ListView.builder(
