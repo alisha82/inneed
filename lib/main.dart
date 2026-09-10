@@ -11,7 +11,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+//load the dotenv first so api can run before starting the app
   try {
     await dotenv.load(fileName: ".env");
   } catch (e) {
