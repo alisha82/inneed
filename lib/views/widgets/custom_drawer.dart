@@ -154,7 +154,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  // Gallery se image select karne ke liye
+  //for selecting img from gallery
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(

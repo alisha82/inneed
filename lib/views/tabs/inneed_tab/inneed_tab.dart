@@ -210,8 +210,7 @@ class _inNeedtabstate extends State<inNeedTab> with AutomaticKeepAliveClientMixi
           print("Error fetching user profile data: $err");
         }
       }
-
-      // Fallback agar Firestore mein bhi phone number na mile
+      //fallback if phone number is not available in firestore
       if (senderPhone.isEmpty) {
         senderPhone = 'Not Provided';
       }
