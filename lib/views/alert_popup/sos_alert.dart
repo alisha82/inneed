@@ -246,7 +246,7 @@ void showSosAlertPopup({
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      return SosAlert( // Fix: Class name SosAlert matched
+      return SosAlert( // Class name SosAlert matched
         emergencyType: emergencyType,
         senderName: senderName,
         senderPhone: senderPhone,

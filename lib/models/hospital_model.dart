@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+
 class HospitalModel {
   final String id;
   final String name;

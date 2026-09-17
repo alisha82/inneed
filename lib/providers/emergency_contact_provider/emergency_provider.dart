@@ -7,11 +7,11 @@ class EmergencyProvider with ChangeNotifier {
 
   String? get callingNumber => _callingNumber;
 
-  // Phone Dialer Call Karne Ka Method
+  //method of calling phone dialer
   Future<void> makePhoneCall(String phoneNumber) async {
     _callingNumber = phoneNumber;
     notifyListeners();
-    // Sirf state listen karne wale button ko update karega
+    //only update the state of this button
 
     final Uri launchUri = Uri(
       scheme: 'tel',

@@ -6,7 +6,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // 1. SIGN UP LOGIC (Auth + Firestore Data Save)
+  // SIGN UP LOGIC (Auth + Firestore Data Save)
   Future<String?> signUpUser({
     required String fullName,
     required String email,
@@ -67,7 +67,6 @@ class AuthService {
 
       await googleSignIn.initialize();
 
-      // 3. Pehle purana session clear karein taake account selection popup theek se aaye
       await googleSignIn.signOut();
 
       // Authenticate (Sign-in trigger)
@@ -77,7 +76,7 @@ class AuthService {
 
       final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
 
-      // get uthentication tokens
+      // get authentication tokens
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
       final GoogleSignInClientAuthorization authorization = await googleUser
