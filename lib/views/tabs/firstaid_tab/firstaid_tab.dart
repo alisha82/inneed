@@ -400,13 +400,13 @@ class _FirstAidtabstate extends State<FirstAidTab> {
                       children: [
                         Icon(
                           Icons.warning_amber_rounded,
-                          size: 12,
+                          size: 16,
                           color: Colors.amber,
                         ),
                         SizedBox(width: 4),
                         Text(
                           "This is guidance only, not medical advice. Always call 1122 for \nemergencies.",
-                          style: TextStyle(fontSize: 10, color: Colors.grey),
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ],
                     ),

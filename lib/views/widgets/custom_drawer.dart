@@ -17,9 +17,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   File? _imageFile;
-  String _fullName = 'Loading...';
-  String _email = '';
-  String _phone = 'Not available';
+  String _fullName = 'Guest User';
+  String _email = 'Not logged in';
+  String _phone = '';
   String _location = 'Lahore, Pakistan';
 
   @override
@@ -28,7 +28,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     _loadUserData();
   }
 
-  // for fetching exact fields from firebase
+  // Fetching exact user fields from Firebase if authenticated
   void _loadUserData() async {
     User? currentUser = _auth.currentUser;
 
@@ -61,16 +61,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
         });
       }
     } else {
+      // Setting default details for guest mode
       setState(() {
         _fullName = 'Guest User';
         _email = 'Not logged in';
-        _phone = '';
+        _phone = 'Not available';
       });
     }
   }
 
-  // Edit Name Dialog
+  // Edit Name Dialog (Disabled or restricted in guest mode)
   void _editNameDialog() {
+    if (_auth.currentUser == null) return;
     TextEditingController nameController = TextEditingController(text: _fullName);
 
     showDialog(
@@ -110,8 +112,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  // Edit Phone Dialog
+  // Edit Phone Dialog (Disabled or restricted in guest mode)
   void _editPhoneDialog() {
+    if (_auth.currentUser == null) return;
     TextEditingController phoneController = TextEditingController(
       text: _phone == 'Not available' ? '' : _phone,
     );
@@ -154,8 +157,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  //for selecting img from gallery
+  // Selecting image from the gallery (Disabled in guest mode)
   Future<void> _pickImage() async {
+    if (_auth.currentUser == null) return;
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
@@ -172,6 +176,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     User? currentUser = _auth.currentUser;
+    bool isLoggedIn = currentUser != null; // Check whether the user is logged in or browsing as a guest
 
     return Drawer(
       backgroundColor: const Color(0xFFFFFBFB),
@@ -204,26 +209,27 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       )
                           : null,
                     ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: _pickImage,
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.grey.shade300, width: 1.5),
-                          ),
-                          child: const Icon(
-                            Icons.camera_alt,
-                            size: 16,
-                            color: Color(0xFFE53935),
+                    if (isLoggedIn) // Show camera icon exclusively for logged-in users
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: _pickImage,
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.grey.shade300, width: 1.5),
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              size: 16,
+                              color: Color(0xFFE53935),
+                            ),
                           ),
                         ),
                       ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -238,11 +244,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(width: 6),
-                    GestureDetector(
-                      onTap: _editNameDialog,
-                      child: const Icon(Icons.edit, size: 16, color: Colors.white70),
-                    ),
+                    if (isLoggedIn) ...[
+                      const SizedBox(width: 6),
+                      GestureDetector(
+                        onTap: _editNameDialog,
+                        child: const Icon(Icons.edit, size: 16, color: Colors.white70),
+                      ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -262,21 +270,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
               children: [
-                ListTile(
-                  leading: const Icon(Icons.phone_outlined, color: Color(0xFFE53935)),
-                  title: const Text(
-                    'Phone',
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                if (isLoggedIn)
+                  ListTile(
+                    leading: const Icon(Icons.phone_outlined, color: Color(0xFFE53935)),
+                    title: const Text(
+                      'Phone',
+                      style: TextStyle(fontSize: 13, color: Colors.grey),
+                    ),
+                    subtitle: Text(
+                      _phone,
+                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black87),
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit, size: 18, color: Colors.black54),
+                      onPressed: _editPhoneDialog,
+                    ),
                   ),
-                  subtitle: Text(
-                    _phone,
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black87),
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.edit, size: 18, color: Colors.black54),
-                    onPressed: _editPhoneDialog,
-                  ),
-                ),
                 ListTile(
                   leading: const Icon(Icons.email_outlined, color: Color(0xFFE53935)),
                   title: const Text(
@@ -303,29 +312,43 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
           ),
 
-          // Bottom Sign Out Section
+          // Bottom Sign In / Sign Out Dynamic Section
           const Divider(height: 1),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: ListTile(
-              leading: const Icon(Icons.logout, color: Color(0xFFE53935)),
-              title: const Text(
-                'Sign Out',
-                style: TextStyle(
+              leading: Icon(
+                isLoggedIn ? Icons.logout : Icons.login,
+                color: const Color(0xFFE53935),
+              ),
+              title: Text(
+                isLoggedIn ? 'Sign Out' : 'Sign In',
+                style: const TextStyle(
                   color: Color(0xFFE53935),
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               onTap: () async {
-                await _auth.signOut();
-                if (context.mounted) {
-                  Navigator.pushAndRemoveUntil(
+                if (isLoggedIn) {
+                  // Sign out the user and navigate back to the LoginScreen, clearing navigation history
+                  await _auth.signOut();
+                  if (context.mounted) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                          (route) => false,
+                    );
+                  }
+                } else {
+                  // Navigate to the LoginScreen if the user is currently browsing as a guest
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const LoginScreen(),
                     ),
-                        (route) => false,
                   );
                 }
               },

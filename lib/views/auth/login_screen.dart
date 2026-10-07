@@ -3,6 +3,7 @@ import 'package:inneed/views/auth/signup_screen.dart';
 import 'package:inneed/views/home/main_screen.dart';
 import 'package:inneed/views/widgets/custom_snackbar.dart';
 import 'package:inneed/views/auth/auth_service/auth_service.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -18,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
   final AuthService _authService = AuthService();
 
-  // Login Logic Function with Custom Snackbar Integration
+  // Login Logic Function with Direct Clean Error Message
   void _handleLogin() async {
     if (_emailController.text.trim().isEmpty ||
         _passwordController.text.trim().isEmpty) {
@@ -56,9 +57,10 @@ class _LoginScreenState extends State<LoginScreen> {
               (route) => false,
         );
       } else {
+        //error handling msg
         AppSnackbar.show(
           context,
-          message: errorMessage,
+          message: 'Email or password is incorrect',
           isSuccess: false,
         );
       }
@@ -66,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (mounted) {
         AppSnackbar.show(
           context,
-          message: 'An error occurred: ${e.toString()}',
+          message: 'Email or password is incorrect',
           isSuccess: false,
         );
       }

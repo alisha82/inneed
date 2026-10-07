@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inneed/views/Auth/login_screen.dart';
 import 'package:inneed/views/Widgets/custom_snackbar.dart';
 import 'package:inneed/views/auth/auth_service/auth_service.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -19,7 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isLoading = false;
   final AuthService _authService = AuthService();
 
-  // Sign Up Logic with Custom Snackbar Integration
+  // Sign Up Logic with Clean Custom Messages
   void _handleSignUp() async {
     if (_fullNameController.text.trim().isEmpty ||
         _emailController.text.trim().isEmpty ||
@@ -28,6 +29,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
       AppSnackbar.show(
         context,
         message: 'Please fill all fields',
+        isSuccess: false,
+      );
+      return;
+    }
+
+    // Phone Number Validation Check
+    final phoneText = _phoneController.text.trim();
+    if (phoneText.length < 7 || !RegExp(r'^[0-9+]+$').hasMatch(phoneText)) {
+      AppSnackbar.show(
+        context,
+        message: 'The number is not valid please enter the correct number',
         isSuccess: false,
       );
       return;
@@ -50,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       String? errorMessage = await _authService.signUpUser(
         fullName: _fullNameController.text.trim(),
         email: _emailController.text.trim(),
-        phone: _phoneController.text.trim(),
+        phone: phoneText,
         password: _passwordController.text.trim(),
       );
 
@@ -64,9 +76,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         );
         Navigator.pop(context);
       } else {
+        // Direct simple message for any email/auth issue during signup
         AppSnackbar.show(
           context,
-          message: errorMessage,
+          message: 'Email is incorrect please enter the correct email',
           isSuccess: false,
         );
       }
@@ -74,7 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (mounted) {
         AppSnackbar.show(
           context,
-          message: 'An error occurred: ${e.toString()}',
+          message: 'Email is incorrect please enter the correct email',
           isSuccess: false,
         );
       }
@@ -262,8 +275,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context)=> const LoginScreen()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen()));
                     },
                     child: const Text(
                       'Log In',

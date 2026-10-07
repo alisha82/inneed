@@ -10,6 +10,7 @@ import 'package:marquee/marquee.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -24,7 +25,55 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    setupFCMNotifications();
     listenForSosAlerts();
+  }
+
+  void setupFCMNotifications() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    //foregroud notifications
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    // Ask user notification permission
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission for notifications');
+    } else {
+      print('User declined or accepted provisional permission');
+    }
+    //get device fcm token( for targeted notifications)
+    String? token = await messaging.getToken();
+    print("FCM Registration Token: $token");
+
+    //if user is logged in, update his token in firestore
+    String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    if (currentUserId != null && token != null) {
+      await FirebaseFirestore.instance.collection('users').doc(currentUserId).set({
+        'fcmToken': token,
+        'lastActive': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    }
+
+    //handling foreground msg
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Foreground message received: ${message.notification?.title}');
+      // Agar notification aati hai toh popup Firestore listener khud handle kar lega agar app open hai.
+      //if notification is received, firestore listener will handle popup itself if app is open
+    });
+
+    // Handle notification click in background
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('App opened from background via notification: ${message.messageId}');
+    });
   }
 
   void listenForSosAlerts() {
@@ -72,7 +121,7 @@ class _MainScreenState extends State<MainScreen> {
               distanceInKm = 0.0;
             }
 
-            // Setting 5km radius
+            // Setting 5km radius check for foreground popup
             if (distanceInKm <= 5.0 && mounted) {
               showSosAlertPopup(
                 context: context,
